@@ -1,0 +1,95 @@
+label
+{
+	font-size: 50px;
+	vertical-align: top;
+	color:#F0F0F0;
+	font-weight: bold;
+	font-family: sans-serif;
+}
+
+#setlog
+{
+	text-align: center;
+	padding-left: 100px;
+	padding-top: 10px;
+
+}
+
+ul {
+  list-style: none;
+  padding-left: 100px;
+  padding-top: 20px;
+  font-size: 16px;
+
+}
+
+ul li::before {
+  content: "\2022";
+  color: red;
+  font-weight: bold;
+  display: inline-block; 
+  width: 1em;
+  margin-left: -1em;
+
+}
+ul li
+{
+	color: black;
+	 padding-left: 100px;
+  padding-top: 10px;
+  font-size: 14px;
+  text-align: left;
+}
+
+/* Container holding the image and the text */
+.container {
+  position: relative;
+  text-align: center;
+  color: white;
+}
+
+
+/* Top left text */
+.top-left {
+  position: absolute;
+  top: 8px;
+  left: 16px;
+}
+b{
+	font-size: 20px;
+}
+#logindesign
+{
+	background-color: white;
+	float: right;width: 350px;height:400px;
+	margin-left: 800px;
+	border-radius: 20px;
+	margin-bottom: 300px;
+	/*border: 5px solid #58CABA;*/
+}
+body
+{
+	font-family: sans-serif;
+  margin: 0px;
+}
+p
+{
+	color: black;
+	font-size: 15px;
+	font-weight: bold;
+}
+@keyframes zoominoutsinglefeatured {
+    0% {
+        transform: scale(1,1);
+    }
+    50% {
+        transform: scale(1.2,1.2);
+    }
+    100% {
+        transform: scale(1,1);
+    }
+}
+
+.cardcontainer img {
+    animation: zoominoutsinglefeatured 1s infinite ;
+}

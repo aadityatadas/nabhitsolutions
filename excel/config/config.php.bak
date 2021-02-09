@@ -1,0 +1,9 @@
+<?php
+
+date_default_timezone_set('Asia/Calcutta');	
+$username = 'root';
+$password = '';
+$connection = new PDO( 'mysql:host=localhost;dbname=nabhbudd_nabhdemonew', $username, $password );
+
+$connect = mysqli_connect("localhost", "root", "", "nabhbudd_nabhdemonew"); 
+?>

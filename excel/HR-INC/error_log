@@ -1,0 +1,9 @@
+[21-Feb-2019 19:45:01 UTC] PHP Warning:  mysqli_num_rows() expects parameter 1 to be mysqli_result, boolean given in /home/rnptrghu/public_html/nabhpios/hms/excel/HR-INC/export.php on line 11
+[22-Feb-2019 04:26:51 UTC] PHP Warning:  mysqli_num_rows() expects parameter 1 to be mysqli_result, boolean given in /home/rnptrghu/public_html/nabhpios/hms/excel/HR-INC/export.php on line 11
+[22-Feb-2019 04:29:05 UTC] PHP Warning:  mysqli_num_rows() expects parameter 1 to be mysqli_result, boolean given in /home/rnptrghu/public_html/nabhpios/hms/excel/HR-INC/export.php on line 11
+[22-Feb-2019 04:30:07 UTC] PHP Warning:  mysqli_num_rows() expects parameter 1 to be mysqli_result, boolean given in /home/rnptrghu/public_html/nabhpios/hms/excel/HR-INC/export.php on line 11
+[22-Feb-2019 04:30:54 UTC] PHP Warning:  mysqli_num_rows() expects parameter 1 to be mysqli_result, boolean given in /home/rnptrghu/public_html/nabhpios/hms/excel/HR-INC/export.php on line 11
+[22-Feb-2019 04:32:58 UTC] PHP Warning:  mysqli_num_rows() expects parameter 1 to be mysqli_result, boolean given in /home/rnptrghu/public_html/nabhpios/hms/excel/HR-INC/export.php on line 11
+[22-Feb-2019 04:34:15 UTC] PHP Warning:  mysqli_num_rows() expects parameter 1 to be mysqli_result, boolean given in /home/rnptrghu/public_html/nabhpios/hms/excel/HR-INC/export.php on line 10
+[22-Feb-2019 04:34:53 UTC] PHP Warning:  mysqli_num_rows() expects parameter 1 to be mysqli_result, boolean given in /home/rnptrghu/public_html/nabhpios/hms/excel/HR-INC/export.php on line 10
+[22-Feb-2019 04:35:33 UTC] PHP Warning:  mysqli_num_rows() expects parameter 1 to be mysqli_result, boolean given in /home/rnptrghu/public_html/nabhpios/hms/excel/HR-INC/export.php on line 10

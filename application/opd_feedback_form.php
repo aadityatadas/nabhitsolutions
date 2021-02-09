@@ -1,0 +1,826 @@
+<?php
+	error_reporting(0);
+	session_start();
+	date_default_timezone_set('Asia/Calcutta');	
+	$frdt = date('Y-m-01');
+	$todt = date('Y-m-31');
+	$typ = $_SESSION['typ'];
+	$syr = $_SESSION['finyr'];
+	include"header.php";
+	include"footer.php";
+	$dt = date('d/m/Y');
+	$tm = date('h:i:s a');
+	$yr = date('Y');	
+?>
+<link href="testsign/assets/my_sign.css" rel="stylesheet">
+<script src="testsign/assets/flashcanvas.js"></script>
+
+
+<script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+<script type="text/javascript">
+	var auto_refresh = setInterval(
+	function ()
+	{
+	$('#opdf').load('opdf_count.php').fadeIn("slow");
+	}, 1000); // refresh every 5000 milliseconds
+	
+</script>
+<style>
+.preload{
+	margin:0;
+	position:absolute;
+	top:50%;
+	left:60%;
+	margin-right: -50%;
+	transform:translate(-50%, -50%);
+}
+#bx1,
+#bx2,
+#adm,
+#order-table{
+	display:none;
+}
+.form-control{
+	margin-bottom:10px;
+}
+</style>
+<style type="text/css">
+	#wrapper {
+  width: 100%;
+}
+#page-wrapper {
+  padding: 0 15px;
+  min-height: 568px;
+  background-color: white;
+  border-color:#D9EDF7; 
+}
+@media (min-width: 768px) {
+  #page-wrapper {
+    position: inherit;
+    margin: 0 0 0 0px;
+    padding: 0 30px;
+    border-left: 1px solid #e7e7e7;
+  }
+
+}
+.box {
+    height: 100%;
+    overflow: hidden;
+    width: 100%;
+    margin: 0px auto 15px;
+    border: 1px solid black;
+	
+}
+
+.form-group label {
+    font-size: 14px;
+    line-height: 1.42857;
+    color: #121212 !important;
+    font-weight: 400;
+	
+}
+
+</style>
+<style>
+</style>
+<body>
+<?php include"new-nav-bar.php";?>
+<section class="content home" >
+<div class="container-fluid" >
+	<div class="preload">
+		<img src="../vendor/img/loader2.gif" />
+	</div>
+    <div id="wrapper">
+        <!-- Navigation -->        
+        <div id="page-wrapper">
+            <div class="row">
+				<br />
+				<div class="col-lg-12">
+                    <div class="panel panel-info">
+                        <div class="panel-heading"   style="padding:7px;height: 140px;">
+                            OPD Feedbak Form &nbsp;
+                            <div>
+		                    	 <table class="custom-table"  cellspacing="10" cellpadding="10" border="1" width="650px" align="center" style="border-color: #9DA2E2; text-align: center;" >
+		                            		<tr style="background-color: #9DA2E2;">
+		                            			<td style="font-weight: bold;color: white;">Total</td>
+		                            			<td style="font-weight: bold;color: white;">Completed</td>
+		                            			<td style="font-weight: bold;color: white;">Not-Completed</td>
+		                            			<td>
+		                            				&nbsp;
+		                            			</td>
+		                            		</tr>
+		                            		<tr style="background-color: white;">
+		                            			<?php
+													include('dbinfo.php');
+
+													$qry = "SELECT COUNT(*) as total FROM tbl_opd LEFT JOIN tbl_opdwttm  ON Ptbl_opdwttm.opdwttm_id= tbl_opd.opd_id WHERE year(opdwttm_dttmds) = '$yr'";
+														$res = mysqli_query($connect, $qry);
+														$row=mysqli_fetch_assoc($res);
+														// echo $row['total'];
+														// echo "SELECT COUNT(*) as total FROM tbl_huf";
+														// die();
+														//$opdt=$_POST['opdwtm'];
+
+
+														$qrydis = "SELECT COUNT(*) as comp FROM tbl_opd LEFT JOIN tbl_opdwttm  ON tbl_opdwttm.opdwttm_id= tbl_opd.opd_id WHERE (opd_score!='' AND opd_score!='0')AND year(opdwttm_dttmds) = '$yr' ";
+																$rescomp= mysqli_query($connect, $qrydis);
+																$rowcomp=mysqli_fetch_assoc($rescomp);
+																//echo $rowdis['discharge'];
+														                               
+																// echo "SELECT COUNT(*) as comp FROM tbl_opdwttm WHERE opdwttm_opdwttm='".$row["opdwtm"]."'";								die();
+																						
+
+														$qrynotdis = "SELECT COUNT(*) as notcomp FROM tbl_opd  LEFT JOIN tbl_opdwttm  ON tbl_opdwttm.opdwttm_id= tbl_opd.opd_id WHERE (opd_score='0' OR opd_score='' ) AND year(opdwttm_dttmds) = '$yr' ";
+																	$resnotcomp = mysqli_query($connect, $qrynotdis);
+																	$rownotcomp=mysqli_fetch_assoc($resnotcomp);
+																	// echo $rownotdis['notdischarge'];
+																	// echo "SELECT COUNT(*) as notdischarge FROM tbl_huf WHERE (huf_ddd='Death' OR huf_ddd='DAMA' OR huf_ddd=' ')";
+																	// die();
+
+													   
+
+													?>
+
+
+		                            			<td style="font-weight: bold;color: black;" ><?php echo $row['total'];?></td>
+		                            			<td style="font-weight: bold;color: green;"><?php echo $rowcomp['comp'];?></td>
+		                            			<td style="font-weight: bold;color: red;"><?php echo $rownotcomp['notcomp'];?></td>
+		                            			<td>
+		                            				<a href="performence.php">Click here for Details</a>
+		                            			</td>
+		                            		
+		                            		</tr>
+		                            	</table>
+                            </div>
+
+                            <span style="box-shadow: 0 0 3px 1px rgba(0,0,0,.35);color: #fff;font-weight:bold;margin-right: 10px;" onclick="myFunction()" class="btn btn-info"><i class="fa fa-print"></i> Print</span>
+
+                           
+                            <span style="box-shadow: 0 0 3px 1px rgba(0,0,0,.35);" onclick="goBack()" class="btn btn-default"><i class="fa fa-arrow-left"></i> Back</span>
+
+                            <button accesskey="n" type="button"  class="btn btn-default pull-right" ><a href="https://nabhbuddy.com/nabhslsh/hms/test6/csv/index1.php" style="color: #333;"><b><i class="fa fa-plus-square fa-fw"></i> Import</b></a></button>
+							<!--<button accesskey="n" type="button" name="add_btn" id="add_btn" class="btn btn-default btn-xs pull-right" ><b><i class="fa fa-plus-square fa-fw"></i>+ Create New</b></button>-->
+                        </div>
+						<div class="box" id="bx1">
+							<div id="adm">
+								<form method="post" id="user_form" class="sigPad" enctype="multipart/form-data">
+									<div class="form-group">
+										<div class="col-lg-12">
+											<label class="col-lg-4">Sr. No. (अनु क्रमांक)</label>
+											<div class="col-lg-2" id="bofid">
+												<input type="text" name="sr_no" id="sr_no" class="form-control" readonly />
+											</div>
+										</div>
+										<div class="col-lg-12">
+											<label class="col-lg-4">Date (दिनांक)</label>
+											<div class="col-lg-3">
+												<input type="text" name="dt" id="dt" placeholder="yyyy-mm-dd" class="form-control" readonly />
+											</div>
+										</div>
+										<div class="col-lg-12">
+											<label class="col-lg-4">Name (Optional)/नाम (वैकल्पिक)</label>
+											<div class="col-lg-7">
+												<input type="text" name="mo1" id="mo1" class="form-control" readonly />
+											</div>
+										</div>
+										<div class="col-lg-12">
+											<label class="col-lg-4">Age (आयु)</label>
+											<div class="col-lg-2">
+												<input type="text" name="mo2" id="mo2" class="form-control" />
+											</div>
+										</div>
+										<div class="col-lg-12">
+											<label class="col-lg-4">Sex (लिंग)</label>
+											<div class="col-lg-2">
+												<select type="text" name="mo3" id="mo3" class="form-control" >
+													<option value="">Select</option>
+													<option value="Male">Male</option>
+													<option value="Female">Female</option>
+												</select>
+											</div>
+										</div>
+										<div class="col-lg-12">
+											<label class="col-lg-4">E-mail ID (ईमेल आईडी)</label>
+											<div class="col-lg-7">
+												<input type="email" name="em" id="em" class="form-control" />
+											</div>
+										</div>
+										<div class="col-lg-12">
+											<label class="col-lg-4">Address (पता)</label>
+											<div class="col-lg-7">
+												<textarea type="text" name="mo4" id="mo4" class="form-control" ></textarea>
+											</div>
+										</div>
+										<div class="col-lg-12">
+											<label class="col-lg-4">Treating Doctor (इलाज कर रहे डॉक्टर)</label>
+											<div class="col-lg-7">
+												<input type="text" name="mo5" id="mo5" class="form-control" />
+											</div>
+										</div>
+										<div class="col-lg-12">
+											<label class="col-lg-4">You Heard/Read about Hospital From <br>(आपने अस्पताल के बारे में सुना / पढ़ा)</label>
+											<div class="col-lg-8">
+												TV/Radio&nbsp;&nbsp;<input type="checkbox" value="TV/Radio" name="aj1" id="tvv" />
+												&nbsp;Print Media/Hoarding&nbsp;&nbsp;<input type="checkbox" value="Print Media/Hoarding" name="aj2" id="prtt" />
+												&nbsp;Friend/Relatives&nbsp;&nbsp;<input type="checkbox" value="Friend/Relatives" name="aj3" id="medd" />
+											</div>
+										</div>
+										<div class="col-lg-12">
+											<br />
+										</div>
+										<div class="col-lg-12">
+											<label class="col-lg-4">Other (Please Specify)/अन्य (कृपया निर्दिष्ट करें)</label>
+											<div class="col-lg-7">
+												<textarea type="text" name="mo7" id="mo7" class="form-control" ></textarea>
+											</div>
+										</div>										
+										<div class="col-lg-12">
+											<hr style="margin-bottom:0px;border:1px solid #900;"/>
+										</div>
+										<div class="col-lg-12">
+											<div id="ord" class="table-responsive">
+												<table class="table table-bordered table-hover">
+													<thead>
+														<tr>
+															<th>Facilities / Services (सुविधाएँ और सेवाएं)</th>
+															<th>Extremely Dissatisfied<br>(अत्यंत असंतुष्ट)</th>
+															<th>Dissatisfied<br>(असंतुष्ट)</th>
+															<th>Neither Satisfied / Nor dissatisfied<br>(न तो संतुष्ट/ न ही असंतुष्ट)</th>
+															<th>Satisfied<br>(संतुष्ट)</th>
+															<th>Extremely SatisfiedSatisfied<br>(अत्यंत समाधानी)</th>
+														</tr>
+													</thead>
+													<tbody>
+														<tr>
+															<td>1) Reception Staff<br>&nbsp;&nbsp;&nbsp;&nbsp;(रिसेप्शन स्टाफ)</td>
+															<td><input type="radio" value="1" name="chk1" id="chhk1" /></td>
+															<td><input type="radio" value="2" name="chk1" id="chhk2" /></td>
+															<td><input type="radio" value="3" name="chk1" id="chhk3" /></td>
+															<td><input type="radio" value="4" name="chk1" id="chhk4" /></td>
+															<td><input type="radio" value="5" name="chk1" id="chhk5" /></td>
+														</tr>
+														<tr>
+															<td>2) Registration Process<br>&nbsp;&nbsp;&nbsp;&nbsp;(पंजीकरण की प्रक्रिया)</td>
+															<td><input type="radio" value="1" name="chk2" id="chhk6" /></td>
+															<td><input type="radio" value="2" name="chk2" id="chhk7" /></td>
+															<td><input type="radio" value="3" name="chk2" id="chhk8" /></td>
+															<td><input type="radio" value="4" name="chk2" id="chhk9" /></td>
+															<td><input type="radio" value="5" name="chk2" id="chhk10" /></td>
+														</tr>
+														<tr>
+															<td>3) O.P.D. Billing<br>&nbsp;&nbsp;&nbsp;&nbsp;(आई.पी.डी. बिलिंग)</td>
+															<td><input type="radio" value="1" name="chk3" id="chhk11" /></td>
+															<td><input type="radio" value="2" name="chk3" id="chhk12" /></td>
+															<td><input type="radio" value="3" name="chk3" id="chhk13" /></td>
+															<td><input type="radio" value="4" name="chk3" id="chhk14" /></td>
+															<td><input type="radio" value="5" name="chk3" id="chhk15" /></td>
+														</tr>
+														<tr>
+															<td>4) Waiting Area<br>&nbsp;&nbsp;&nbsp;&nbsp;(प्रतीक्षा स्थल)</td>
+															<td><input type="radio" value="1" name="chk4" id="chhk16" /></td>
+															<td><input type="radio" value="2" name="chk4" id="chhk17" /></td>
+															<td><input type="radio" value="3" name="chk4" id="chhk18" /></td>
+															<td><input type="radio" value="4" name="chk4" id="chhk19" /></td>
+															<td><input type="radio" value="5" name="chk4" id="chhk20" /></td>
+														</tr>
+														<tr>
+															<td>5) Nursing Staff<br>&nbsp;&nbsp;&nbsp;&nbsp;(नर्सिंग कर्मचारी)</td>
+															<td><input type="radio" value="1" name="chk5" id="chhk21" /></td>
+															<td><input type="radio" value="2" name="chk5" id="chhk22" /></td>
+															<td><input type="radio" value="3" name="chk5" id="chhk23" /></td>
+															<td><input type="radio" value="4" name="chk5" id="chhk24" /></td>
+															<td><input type="radio" value="5" name="chk5" id="chhk25" /></td>
+														</tr>
+														<tr>
+															<td>6) Consultant/Treating Doctor<br>&nbsp;&nbsp;&nbsp;&nbsp;(परामर्शदाता / उपचार करने वाला चिकित्सक)</td>
+															<td><input type="radio" value="1" name="chk6" id="chhk26" /></td>
+															<td><input type="radio" value="2" name="chk6" id="chhk27" /></td>
+															<td><input type="radio" value="3" name="chk6" id="chhk28" /></td>
+															<td><input type="radio" value="4" name="chk6" id="chhk29" /></td>
+															<td><input type="radio" value="5" name="chk6" id="chhk30" /></td>
+														</tr>
+														<tr>
+															<td>7) Waiting Time to see the Doctor<br>&nbsp;&nbsp;&nbsp;&nbsp;(डॉक्टर को देखने के लिए इंतजार का समय)</td>
+															<td><input type="radio" value="1" name="chk7" id="chhk31" /></td>
+															<td><input type="radio" value="2" name="chk7" id="chhk32" /></td>
+															<td><input type="radio" value="3" name="chk7" id="chhk33" /></td>
+															<td><input type="radio" value="4" name="chk7" id="chhk34" /></td>
+															<td><input type="radio" value="5" name="chk7" id="chhk35" /></td>
+														</tr>
+														<tr>
+															<td>8) Pharmacy<br>&nbsp;&nbsp;&nbsp;&nbsp;(फार्मसी)</td>
+															<td><input type="radio" value="1" name="chk8" id="chhk36" /></td>
+															<td><input type="radio" value="2" name="chk8" id="chhk37" /></td>
+															<td><input type="radio" value="3" name="chk8" id="chhk38" /></td>
+															<td><input type="radio" value="4" name="chk8" id="chhk39" /></td>
+															<td><input type="radio" value="5" name="chk8" id="chhk40" /></td>
+														</tr>
+														<tr>
+															<td>9) Diagnostic<br>&nbsp;&nbsp;&nbsp;&nbsp;(डायग्नोस्टिक)</td>
+															<td><input type="radio" value="1" name="chk9" id="chhk41" /></td>
+															<td><input type="radio" value="2" name="chk9" id="chhk42" /></td>
+															<td><input type="radio" value="3" name="chk9" id="chhk43" /></td>
+															<td><input type="radio" value="4" name="chk9" id="chhk44" /></td>
+															<td><input type="radio" value="5" name="chk9" id="chk45" /></td>
+														</tr>
+														<tr>
+															<td>a) Pathology<br>&nbsp;&nbsp;&nbsp;&nbsp;(पॅथॉलॉजी)</td>
+															<td><input type="radio" value="1" name="chk10" id="chhk46" /></td>
+															<td><input type="radio" value="2" name="chk10" id="chhk47" /></td>
+															<td><input type="radio" value="3" name="chk10" id="chhk48" /></td>
+															<td><input type="radio" value="4" name="chk10" id="chhk49" /></td>
+															<td><input type="radio" value="5" name="chk10" id="chhk50" /></td>
+														</tr>
+														<tr>
+															<td>b) Sonography<br>&nbsp;&nbsp;&nbsp;&nbsp;(सोनोग्राफी)</td>
+															<td><input type="radio" value="1" name="chk11" id="chhk51" /></td>
+															<td><input type="radio" value="2" name="chk11" id="chhk52" /></td>
+															<td><input type="radio" value="3" name="chk11" id="chhk53" /></td>
+															<td><input type="radio" value="4" name="chk11" id="chhk54" /></td>
+															<td><input type="radio" value="5" name="chk11" id="chhk55" /></td>
+														</tr>
+														<tr>
+															<td>c) 2D Echo<br>&nbsp;&nbsp;&nbsp;&nbsp;(2 डी इको)</td>
+															<td><input type="radio" value="1" name="chk12" id="chhk56" /></td>
+															<td><input type="radio" value="2" name="chk12" id="chhk57" /></td>
+															<td><input type="radio" value="3" name="chk12" id="chhk58" /></td>
+															<td><input type="radio" value="4" name="chk12" id="chhk59" /></td>
+															<td><input type="radio" value="5" name="chk12" id="chhk60" /></td>
+														</tr>
+														<tr>
+															<td>d) Stress Test<br>&nbsp;&nbsp;&nbsp;&nbsp;(तनाव परीक्षण)</td>
+															<td><input type="radio" value="1" name="chk13" id="chhk61" /></td>
+															<td><input type="radio" value="2" name="chk13" id="chhk62" /></td>
+															<td><input type="radio" value="3" name="chk13" id="chhk63" /></td>
+															<td><input type="radio" value="4" name="chk13" id="chhk64" /></td>
+															<td><input type="radio" value="5" name="chk13" id="chhk65" /></td>
+														</tr>
+														<tr>
+															<td>e) ECGbr>&nbsp;&nbsp;&nbsp;&nbsp;(ईसीजी)</td>
+															<td><input type="radio" value="1" name="chk14" id="chhk66" /></td>
+															<td><input type="radio" value="2" name="chk14" id="chhk67" /></td>
+															<td><input type="radio" value="3" name="chk14" id="chhk68" /></td>
+															<td><input type="radio" value="4" name="chk14" id="chhk69" /></td>
+															<td><input type="radio" value="5" name="chk14" id="chhk70" /></td>
+														</tr>
+														<tr>
+															<td>f) C.T. Scan<br>&nbsp;&nbsp;&nbsp;&nbsp;(सी.टी. स्कैन)</td>
+															<td><input type="radio" value="1" name="chk15" id="chhk71" /></td>
+															<td><input type="radio" value="2" name="chk15" id="chhk72" /></td>
+															<td><input type="radio" value="3" name="chk15" id="chhk73" /></td>
+															<td><input type="radio" value="4" name="chk15" id="chhk74" /></td>
+															<td><input type="radio" value="5" name="chk15" id="chhk75" /></td>
+														</tr>
+														<tr>
+															<td>g) M.R.I<br>&nbsp;&nbsp;&nbsp;&nbsp;(एम.आर.आय.)</td>
+															<td><input type="radio" value="1" name="chk16" id="chhk76" /></td>
+															<td><input type="radio" value="2" name="chk16" id="chhk77" /></td>
+															<td><input type="radio" value="3" name="chk16" id="chhk78" /></td>
+															<td><input type="radio" value="4" name="chk16" id="chhk79" /></td>
+															<td><input type="radio" value="5" name="chk16" id="chhk80" /></td>
+														</tr>
+														<tr>
+															<td>10) Physiotherapy<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(फिजियोथेरेपी)</td>
+															<td><input type="radio" value="1" name="chk17" id="chhk81" /></td>
+															<td><input type="radio" value="2" name="chk17" id="chhk82" /></td>
+															<td><input type="radio" value="3" name="chk17" id="chhk83" /></td>
+															<td><input type="radio" value="4" name="chk17" id="chhk84" /></td>
+															<td><input type="radio" value="5" name="chk17" id="chhk85" /></td>
+														</tr>
+														<tr>
+															<td>11) Cleanliness & Hygeine<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(स्वच्छता और  हायजिन)</td>
+															<td><input type="radio" value="1" name="chk18" id="chhk86" /></td>
+															<td><input type="radio" value="2" name="chk18" id="chhk87" /></td>
+															<td><input type="radio" value="3" name="chk18" id="chhk88" /></td>
+															<td><input type="radio" value="4" name="chk18" id="chhk89" /></td>
+															<td><input type="radio" value="5" name="chk18" id="chhk90" /></td>
+														</tr>
+														<tr>
+															<td>12) Drinking Water Facilities<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(पेयजल की सुविधा)</td>
+															<td><input type="radio" value="1" name="chk19" id="chhk91" /></td>
+															<td><input type="radio" value="2" name="chk19" id="chhk92" /></td>
+															<td><input type="radio" value="3" name="chk19" id="chhk93" /></td>
+															<td><input type="radio" value="4" name="chk19" id="chhk94" /></td>
+															<td><input type="radio" value="5" name="chk19" id="chhk95" /></td>
+														</tr>
+														<tr>
+															<td>13) Toilet Facility<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(शौचालय सुविधा)</td>
+															<td><input type="radio" value="1" name="chk20" id="chhk96" /></td>
+															<td><input type="radio" value="2" name="chk20" id="chhk97" /></td>
+															<td><input type="radio" value="3" name="chk20" id="chhk98" /></td>
+															<td><input type="radio" value="4" name="chk20" id="chhk99" /></td>
+															<td><input type="radio" value="5" name="chk20" id="chhk100" /></td>
+														</tr>
+														<tr>
+															<td>14) Cafeteria<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(कॅफेटेरिया)</td>
+															<td><input type="radio" value="1" name="chk21" id="chhk101" /></td>
+															<td><input type="radio" value="2" name="chk21" id="chhk102" /></td>
+															<td><input type="radio" value="3" name="chk21" id="chhk103" /></td>
+															<td><input type="radio" value="4" name="chk21" id="chhk104" /></td>
+															<td><input type="radio" value="5" name="chk21" id="chhk105" /></td>
+														</tr>
+														<tr>
+															<td>15) Information & Sign Board<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(सूचना और साइन बोर्ड)</td>
+															<td><input type="radio" value="1" name="chk22" id="chhk106" /></td>
+															<td><input type="radio" value="2" name="chk22" id="chhk107" /></td>
+															<td><input type="radio" value="3" name="chk22" id="chhk108" /></td>
+															<td><input type="radio" value="4" name="chk22" id="chhk109" /></td>
+															<td><input type="radio" value="5" name="chk22" id="chhk110" /></td>
+														</tr>
+														<tr>
+															<td>16) Parking Facility<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(पार्किंग सुविधा)</td>
+															<td><input type="radio" value="1" name="chk23" id="chhk111" /></td>
+															<td><input type="radio" value="2" name="chk23" id="chhk112" /></td>
+															<td><input type="radio" value="3" name="chk23" id="chhk113" /></td>
+															<td><input type="radio" value="4" name="chk23" id="chhk114" /></td>
+															<td><input type="radio" value="5" name="chk23" id="chhk115" /></td>
+														</tr>
+														<tr>
+															<td>17) Security Staff<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(सुरक्षा कर्मचारी)</td>
+															<td><input type="radio" value="1" name="chk24" id="chhk116" /></td>
+															<td><input type="radio" value="2" name="chk24" id="chhk117" /></td>
+															<td><input type="radio" value="3" name="chk24" id="chhk118" /></td>
+															<td><input type="radio" value="4" name="chk24" id="chhk119" /></td>
+															<td><input type="radio" value="5" name="chk24" id="chhk120" /></td>
+														</tr>
+													</tbody>
+												</table>
+											</div>
+										</div>
+										<div class="col-lg-12">
+											<hr style="margin-top:0px;border:1px solid #900;"/>
+										</div>
+										<div class="col-lg-12">
+											<label class="col-lg-4">Reason for Dissatisfaction with above services / Facilities(उपरोक्त सेवाओं / सुविधाओं के साथ असंतोष का कारण)</label>
+											<div class="col-lg-7">
+												<textarea type="text" col="3" name="mo8" id="mo8" class="form-control" ></textarea>
+											</div>
+										</div>
+										<div class="col-lg-12">
+											<label class="col-lg-4">Any other Suggestion / Complaints<br>(कोई अन्य सुझाव / शिकायत)</label>
+											<div class="col-lg-7">
+												<textarea type="text" col="3" name="mo9" id="mo9" class="form-control" ></textarea>
+											</div>
+										</div>
+										<div class="col-lg-12">
+											<label class="col-lg-4 ">Signature<br>( हस्ताक्षर / दस्तख़त)</label>
+											<div class="col-lg-8">
+												<div style="display: none" id="showimage"></div>
+											</div>
+										</div>
+										
+										<div class="col-lg-12">
+											<label class="col-lg-4 drawItDesc">Signature<br>( हस्ताक्षर / दस्तख़त)</label>
+											<div class="col-lg-7">
+												<ul class="sigNav">
+												  <li class="drawIt"><a href="#draw-it" >Draw It</a></li>
+												  <li class="clearButton"><a href="#clear" id="clearsign">Clear</a></li>
+												</ul>
+												<div class="sig sigWrapper">
+												  <div class="typed"></div>
+												  <canvas class="pad" width="250" height="150"></canvas>
+												  <input type="hidden" name="output" class="output">
+												</div>
+											</div>
+										</div>
+										<div class="col-lg-12">
+											<hr />
+										</div>
+										<div class="col-lg-12">
+											<div class="col-lg-6">	
+												<input type="hidden" name="user_id" id="user_id" />
+												<input type="hidden" name="operation" id="operation" />
+												<button accesskey="s" type="submit" name="action" id="action" class="btn btn-info pull-right"  style="color:white;font-weight:bold;"/>Submit Details ( Alt + s )</button>
+											</div>
+											<div class="col-lg-6">	
+												<button type="button" class="btn btn-default pull-left" id="close_btn">Close</button>
+											</div>
+										</div>
+									</div>
+								</form>
+							</div>
+						</div>
+                        <div class="box" id="bx2">
+							<div class="panel-body">
+								<div id="order-table" class="table-responsive">
+									<table width="100%" class="table table-bordered table-hover" id="dataTables-example">
+										<thead style="font-size:12px;color:darkblue;">
+											<tr>
+												<th>Action</th>
+												<th>Sr No</th>
+												<th>Date</th>
+												<th>Name (Optional)</th>
+												<th>Age</th>
+												<th>Sex</th>
+												<th>Email</th>
+												<th>Address</th>
+												<th>Treating Doctor</th>
+												<th>Heard about hospital from</th>
+												<th>Other</th>
+												<th>Score (Out of 120)</th>
+												<th>Recorded By</th>
+											</tr>
+										</thead>
+									</table>
+								</div>								
+							</div>
+						<form method="post" action="../excel/OPD-FEED/export.php" class="panel-heading">
+							<div class="col-lg-12">
+								<div class="panel panel-default">
+									<div class="panel-heading">
+										Indicator & Graphs (Month : <?php echo date('M-Y');?>)
+									</div>
+										<div class="col-lg-2">
+											<input  type="text" name="frdt" id="frdt1" value="<?php echo $frmdt;?>" placeholder="From date" class="form-control" />
+
+
+										</div> 
+										<div class="col-lg-2" >
+											<input type="text" name="todt" id="todt1" value="<?php echo $todt;?>" placeholder="To date" class="form-control" />
+										</div>
+										
+    										 <input type="submit" name="export" class="btn btn-danger" value="Excel" style="color:white;font-weight:bold;" />
+    									
+									
+								</div>
+							</div>
+									</form>
+									<!-- /.panel-heading -->
+									<div class="panel-body">
+										<div id="opdf">
+					
+										</div>
+									</div>
+								</div>
+							</div>
+                        </div>
+                    </div>
+                </div>
+				<div class="form-group">
+					<div class="col-lg-12">
+						<div class="col-lg-8" style="padding-left:0;">
+							<label class="col-lg-1">From</label>
+							<div class="col-lg-3">
+								<input type="text" name="frdate" id="frdate" value="<?php echo $frdt;?>" class="form-control" />
+							</div>
+							<label class="col-lg-1">To</label>
+							<div class="col-lg-3">
+								<input type="text" name="todate" id="todate" value="<?php echo $todt;?>" class="form-control" />
+							</div>
+							<div class="col-lg-4">
+								<button type="button" name="search" id="search" class="btn btn-info btn-sm" onclick="line_chart()" style="color:white;font-weight:bold;">SEARCH</button>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="form-group">
+					<div class="col-sm-12">
+						<div id="line_chart_opdf" style="height:400px;"></div>
+					</div>
+				</div>
+            </div>
+        </div>
+        <!-- /#page-wrapper -->
+    </div>
+    <!-- /#wrapper -->
+    <!-- jQuery -->    
+</form>
+</div>
+</section>
+</body>
+</html>
+
+<!--script for signature start-->
+<script src="testsign/js/jquery.signaturepad.js"></script>
+<script src="testsign/assets/json2.min.js"></script>
+ <script>
+		$(document).ready(function() {
+		$('.sigPad').signaturePad({drawOnly:true});
+											});
+ </script>
+<!--script for signature start-->
+
+<script>	
+	$(document).ready(function() {
+		$.datepicker.setDefaults({  
+			dateFormat: 'yy-mm-dd'   
+		});		
+		$("#mo6").datepicker({
+			showOtherMonths: true,
+			selectOtherMonths: true,
+			changeMonth: true,
+			changeYear: true,
+		});
+		$(function(){  
+			$("#dt").datepicker();
+			$("#frdate").datepicker();
+			$("#todate").datepicker();
+		});
+		
+		$(function(){
+			$(".preload").fadeOut(300, function(){
+				$("#bx2").fadeIn(300);
+				$("#order-table").fadeIn(300);
+			});
+		});
+		$('#add_btn').click(function(){
+			$('#user_form')[0].reset();
+			$('#bx1').show('fast');
+			$('#adm').show('fast');
+			$('#add_btn').hide('fast');
+			$('#bx2').hide('fast');
+			$('#md2').hide('fast');
+			$('#mo1').focus();
+			$('#operation').val("Add");
+			$("#action").attr("disabled", false);
+			$('#bofid').load("load_opdno.php");
+		});
+		$('#close_btn').click(function(){
+			$('#user_form')[0].reset();
+			$('#operation').val('');
+			$('#adm').hide('fast');
+			$('#bx1').hide('fast');
+			$('#bx2').show('fast');
+			$('#add_btn').show('fast');
+		});
+		// Fetch Data
+		var dataTable = $('#dataTables-example').DataTable({
+			"processing":true,
+			"serverSide":true,
+			"order":[],
+			"ajax":{
+				url:"fetch_opd_form.php",
+				type:"POST"
+			},
+			"columnDefs":[
+				{
+					"targets":[0, 3, 4],
+					"orderable":false,
+				},
+			],
+		});
+		$(document).on('submit', '#user_form', function(event){
+			event.preventDefault();
+			if(confirm("Are you sure you want to Submit this?"))
+			{
+				$("#action").attr("disabled", true);
+				$.ajax({
+					url:"insert_opd_form.php",
+					method:'POST',
+					data:new FormData(this),
+					contentType:false,
+					processData:false,
+					success:function(data)
+					{
+						alert(data);
+						$('#user_form')[0].reset();
+						$('#adm').hide('fast');
+						$('#bx1').hide('fast');
+						$('#bx2').show('fast');
+						$('#add_btn').show('fast');
+						dataTable.ajax.reload();
+					}
+				});
+			}
+		});
+		$(document).on('click', '.update', function(){
+			var user_id = $(this).attr("id");
+			$.ajax({
+				url:"fetch_single_opd_form.php",
+				method:"POST",
+				data:{user_id:user_id},
+				dataType:"json",
+				success:function(data)
+				{
+					$('#bx1').show('fast');
+					$('#adm').show('fast');
+					$('#bx2').hide('fast');
+					$('#add_btn').hide('fast');
+					$('#sr_no').focus();
+					$('#sr_no').val(data.sr_no);
+					$('#dt').val(data.dt);
+					$('#mo1').val(data.mo1);
+					$('#mo2').val(data.mo2);
+					$('#mo3').val(data.mo3);
+					$('#em').val(data.em);
+					$('#mo4').val(data.mo4);
+					$('#mo5').val(data.mo5);
+					//$('#tvv').val(data.chkk1);
+					//$('#prtt').val(data.chkk2);
+					//$('#medd').val(data.chkk3);
+					$('#mo7').val(data.mo7);
+					$('#chhk1').val(data.chk1);
+					$('#chhk2').val(data.chk2);
+					$('#chhk3').val(data.chk3);
+					$('#chhk4').val(data.chk4);
+					$('#chhk5').val(data.chk5);
+					$('#chhk6').val(data.chk6);
+					$('#chhk7').val(data.chk7);
+					$('#chhk8').val(data.chk8);
+					$('#chhk9').val(data.chk9);
+					$('#chhk10').val(data.chk10);
+					$('#chhk11').val(data.chk11);
+					$('#chhk12').val(data.chk12);
+					$('#chhk13').val(data.chk13);
+					$('#chhk14').val(data.chk14);
+					$('#chhk15').val(data.chk15);
+					$('#chhk16').val(data.chk16);
+					$('#chhk17').val(data.chk17);
+					$('#chhk18').val(data.chk18);
+					$('#chhk19').val(data.chk19);
+					$('#chhk20').val(data.chk20);
+					$('#chhk21').val(data.chk21);
+					$('#chhk22').val(data.chk22);
+					$('#chhk23').val(data.chk23);
+					$('#chhk24').val(data.chk24);					
+					$('#mo8').val(data.mo8);
+					$('#mo9').val(data.mo9);
+					
+
+					$("#showimage").empty();
+					if(data.user_sign !='')
+					{
+
+						html ='<img src="user_sign_opd/'+data.user_sign+'" alt="'+data.user_sign+'" width="250" height="150">';
+						$("#showimage").append(html);
+						$("#showimage").show();
+					
+					}
+					$('#clearsign').click();
+					$('#user_id').val(data.sr_no);
+					$('#action').val("Update Details ( Alt + s )");
+					$('#operation').val("Edit");					
+					$("#action").attr("disabled", false);
+				}
+			})
+		});
+		$(document).on('click', '.delete', function(){
+			var user_id = $(this).attr("id");
+			if(confirm("Are you sure you want to delete this?"))
+			{
+				$.ajax({
+					url:"delete_opd_form.php",
+					method:"POST",
+					data:{user_id:user_id},
+					success:function(data)
+					{
+						alert(data);
+						dataTable.ajax.reload();
+					}
+				});
+			}
+			else
+			{
+				return false;	
+			}
+		});
+	});
+</script>
+<script type="text/javascript">
+	jQuery(function($) {
+		$.mask.definitions['~']='[+-]'; 
+		$('#mo6').mask('9999-99-99');// for  To Date
+		$('#frdate').mask('9999-99-99');// for Date
+		$('#todate').mask('9999-99-99');// for Date
+	});
+</script>
+<script type="text/javascript">	
+		// Load the Visualization API and the piechart package.
+		google.charts.load('current', {'packages':['corechart']});
+		  
+		// Set a callback to run when the Google Visualization API is loaded.
+		google.charts.setOnLoadCallback(line_chart);
+		
+		function line_chart() 
+		{
+			var frdate = $('#frdate').val();
+			var todate = $('#todate').val();
+			if(frdate != '' && todate != '')
+			{
+				// chart three
+					var jsonData = $.ajax({
+					url: 'opd_satis_chart.php',
+					dataType:"json",
+					method:"POST",
+					async: false,
+					data:{frdate:frdate,todate:todate},
+					success: function(jsonData)
+						{
+							var options = 
+							{
+								title:'Overall OPD Satisfaction Rating',
+								legend: '',
+								hAxis: { minValue: 0, maxValue: 10 },
+								//curveType: 'function',
+								pointSize: 7,
+								dataOpacity: 0.3
+							};
+							var data = new google.visualization.arrayToDataTable(jsonData);	
+							 var chart = new google.visualization.ColumnChart(document.getElementById('line_chart_opdf'));
+							 chart.draw(data, options);
+							
+						}	
+					}).responseText;
+			}	
+		}	
+</script>

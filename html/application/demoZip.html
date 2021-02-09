@@ -1,0 +1,65 @@
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+
+<form>
+    <label for="zip">Zip:</label>
+    <input id="zip" name="zip"/>
+    <label for="city">City:</label>
+    <input id="state" name="state"/>
+    <label for="state">State:</label>
+    <input id="state" name="state"/>
+  </form>
+
+  <script>
+  
+  $('#zip').blur(function(){
+  var zip = $(this).val();
+  var city = '';
+  var state = '';
+
+  //make a request to the google geocode api
+  var url = "http://postalpincode.in/api/pincode/440035";
+  jQuery.support.cors = true;
+
+	
+  $.ajax(
+                {
+                   
+                    url: 'https://seller.flipkart.com/selfSignup/locations?pincode=440024',
+                    method:'GET',
+                    
+                    contentType: "application/json; charset=utf-8",
+                   
+                    success: function (data) {
+                    console.log(data);
+                        //alert('success');
+                        // $.each(data, function (i, theItem) {
+                        //     var combo = document.getElementById("cboFastBikes");
+                        //     var option = document.createElement("option");
+                        //     option.text = theItem.toString();
+                        //     option.value = theItem.toString();
+                        //     try {
+                        //         //alert('success add combo');
+                        //         combo.add(option, null); // Other browsers
+                        //     }
+                        //     catch (error) {
+                        //         alert('error found');
+                        //         combo.add(option); // really old browser
+                        //     }
+
+                        // });
+                    },
+                    error: function (msg, url, line) {
+                        alert('error trapped in error: function(msg, url, line)');
+                        alert('msg = ' + msg + ', url = ' + url + ', line = ' + line);
+
+                    }
+                });
+				
+		});
+
+       
+
+    //pre-fill the city and state
+
+  </script>

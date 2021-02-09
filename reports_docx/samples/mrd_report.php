@@ -1,0 +1,452 @@
+<?php
+include_once 'Sample_Header.php';
+
+use PhpOffice\PhpWord\Shared\Converter;
+
+
+
+if(isset($_POST['auditSelectedMonthDR11']) && isset($_POST['auditSelectedYearDR11'])){
+// New Word document
+echo date('H:i:s'), ' Create new PhpWord object', EOL;
+$phpWord = new \PhpOffice\PhpWord\PhpWord();
+
+$monthR1 = $_POST['auditSelectedMonthDR11'];
+$yearR1 = $_POST['auditSelectedYearDR11'];
+
+$monthR2 = $_POST['auditSelectedMonthDR21'];
+$yearR2 = $_POST['auditSelectedYearDR21'];
+
+
+
+if($monthR1 >= $monthR2){
+  $max = $monthR1;
+  $min = $monthR2;
+} else{
+    $max = $monthR2;
+    $min = $monthR1;
+}
+
+
+
+$phpWord->setDefaultFontName('Times New Roman');
+$phpWord->setDefaultFontSize(12);
+
+// Define styles
+$phpWord->addTitleStyle(1, array('size' => 14, 'bold' => true), array('keepNext' => true, 'spaceBefore' => 240));
+$phpWord->addTitleStyle(2, array('size' => 14, 'bold' => true), array('keepNext' => true, 'spaceBefore' => 240));
+
+//image start
+$section = $phpWord->addSection(array('borderColor' => '00FF00', 'borderSize' => 12));
+
+//tab
+
+$auditHeading= 'MRD Audit';
+$phpWord->addFontStyle('r2Style', array('bold'=>true, 'italic'=>false, 'size'=>30,'underline'=>'single'));
+$phpWord->addParagraphStyle('p2Style', array('align'=>'center', 'spaceAfter'=>100));
+$section->addText($auditHeading, 'r2Style', 'p2Style'); 
+
+
+
+// $headTextElement->setFontStyle($fontStyle);
+
+
+
+//tab
+//$html = '<center> <h1 style="align:center">Adding element via HTML</h1></center>';
+
+$section->addimage('resources/hosp.png', array('marginTop' => 200, 'marginLeft' => 50,'marginRight' => 50,'width'=>400,'height'=>350) );
+//$section->addText('The header reference to the current section includes a watermark image.');
+//image end
+
+
+
+//\PhpOffice\PhpWord\Shared\Html::addHtml($section, $html, false, false);
+
+//table start
+// Define styles
+
+
+$rightTabStyleName = 'rightTab';
+
+
+$left ="Audit Done By:".'/n'.'Mrs. Shilpi Guryani'.'/n'.'Pharmacist';
+
+
+$right ="Audit Reviewed By:".'/n'.' Dr. Deepak Jeswani'.'/n'.'Medical Director';                  
+
+
+//$section->addText("{$left}\t{$right}", null, $rightTabStyleName);
+
+$styleTable = array('borderColor'=>'#CCC', 'borderSize'=> 2, 'valign'=>'center');
+
+$phpWord->addTableStyle('Colspan Rowspan', $styleTable);
+$table = $section->addTable('Colspan Rowspan');
+
+$row = $table->addRow();
+$row->addCell(5000, array('vMerge' => 'restart'))->addText($left);
+$row->addCell(2000, array('gridSpan' => 5, 'vMerge' => 'restart'))->addText();
+$row->addCell(2000, array('gridSpan' => 5, 'vMerge' => 'restart'))->addText();
+$row->addCell(2000, array('gridSpan' => 5, 'vMerge' => 'restart'))->addText();
+$row->addCell(5000)->addText($right);
+
+
+
+
+// $row = $table->addRow();
+// $row->addCell(1000, array('vMerge' => 'continue'));
+// $row->addCell(1000, array('vMerge' => 'continue', 'gridSpan' => 2));
+// $row->addCell(1000)->addText('2');
+
+// $row = $table->addRow();
+// $row->addCell(1000, array('vMerge' => 'continue'));
+// $row->addCell(1000)->addText('C');
+// $row->addCell(1000)->addText('D');
+// $row->addCell(1000)->addText('C');
+// $row->addCell(1000)->addText('D');
+// $row->addCell(1000)->addText('C');
+
+// $row->addCell(1000)->addText('3');
+
+
+
+
+$monthsAll = array();
+
+$total = 0;
+$totalAll = 0;
+
+for($i= $min;$i<=$max;$i++){
+
+  $mr_without_dis_summary=0;
+  $mr_having_incm_imp_const=0;
+  $mr_without_sign_init_ass_sheet=0;
+  $mr_without_sign_init_medictn_order=0;
+  $mr_without_nursing_asst=0;
+  $mr_without_nutrition_asst=0;
+  $mr_without_physipy_asst=0;
+   $post_anaesthesia_scroing_sign_anaesthist=0;
+
+$query1 = "SELECT count(*) as c FROM tbl_huf where month(huf_dadm) = '$i' and year(huf_dadm) = '$yearR1'";
+
+
+
+$result1 = mysqli_query($connect, $query1);
+
+
+$row1 = $result1->fetch_row();
+
+$count1 = $row1[0];
+
+$totalAll = $totalAll + $count1;
+
+
+
+$query = "SELECT * FROM tbl_medical_record_audit WHERE (month(monthyear)='$i' AND  year(monthyear)='$yearR1')";
+
+$result = mysqli_query($connect, $query);
+$mlc_count = $result -> num_rows;
+
+$total = $total + $mlc_count;
+
+
+ foreach ($result as $key => $row) {
+   
+
+   if($row["mr_without_dis_summary"]=='Yes'){
+      $mr_without_dis_summary++;
+    }
+    if($row["mr_having_incm_imp_const"]=='Yes'){
+      $mr_having_incm_imp_const++;
+    }
+    if($row["mr_without_sign_init_ass_sheet"]=='Yes'){
+      $mr_without_sign_init_ass_sheet++;
+    }
+    if($row["mr_without_sign_init_medictn_order"]=='Yes'){
+      $mr_without_sign_init_medictn_order++;
+    }
+    if($row["mr_without_nursing_asst"]=='Yes'){
+      $mr_without_nursing_asst++;
+    }
+    if($row["mr_without_nutrition_asst"]=='Yes'){
+      $mr_without_nutrition_asst++;
+    }
+    if($row["mr_without_physipy_asst"]=='Yes'){
+      $mr_without_physipy_asst++;
+    }
+
+     if($row["post_anaesthesia_scroing_sign_anaesthist"]=='Yes'){
+      $post_anaesthesia_scroing_sign_anaesthist++;
+    }
+
+   // [patient_name_present] => [medic_caps_legible] => [dose] => [quantity] => [date_prescription] => [high_risk_medicn_verified] => [sign_of_doc] =>
+   
+ }
+     //echo count($result);
+        if($mlc_count){
+        $mr_without_dis_summary_per=($mr_without_dis_summary/$mlc_count)*100;
+       $mr_having_incm_imp_const_per=($mr_having_incm_imp_const/$mlc_count)*100;
+       $mr_without_sign_init_ass_sheet_per=($mr_without_sign_init_ass_sheet/$mlc_count)*100;
+       $mr_without_sign_init_medictn_order_per=($mr_without_sign_init_medictn_order/$mlc_count)*100;
+       $mr_without_nursing_asst_per=($mr_without_nursing_asst/$mlc_count)*100;
+       $mr_without_nutrition_asst_per=($mr_without_nutrition_asst/$mlc_count)*100;
+       $mr_without_physipy_asst_per=($mr_without_physipy_asst/$mlc_count)*100;
+        $post_anaesthesia_scroing_sign_anaesthist_per=($post_anaesthesia_scroing_sign_anaesthist/$mlc_count)*100;
+
+       $monthName = date("F", mktime(0, 0, 0, $i, 10))."-".$yearR1;
+
+       $monthsAll[] = $monthName;
+       $dataAll[] = array(
+            'month'=> $monthName,
+            'count' => $mlc_count,
+            'mr_without_dis_summary' => $mr_without_dis_summary_per,
+            'mr_having_incm_imp_const' => $mr_having_incm_imp_const_per,
+            'mr_without_sign_init_ass_sheet' => $mr_without_sign_init_ass_sheet_per,
+            'mr_without_sign_init_medictn_order' => $mr_without_sign_init_medictn_order_per,
+            'mr_without_nursing_asst' => $mr_without_nursing_asst_per,
+            'mr_without_nutrition_asst' => $mr_without_nutrition_asst_per,
+            'mr_without_physipy_asst' => $mr_without_physipy_asst_per,
+             'post_anaesthesia_scroing_sign_anaesthist' => $post_anaesthesia_scroing_sign_anaesthist_per,
+   );
+
+       $json['mr_without_dis_summary'][] = (int)$mr_without_dis_summary_per;
+
+       $json['mr_having_incm_imp_const'][] =  (int)$mr_having_incm_imp_const_per;
+
+       $json['mr_without_sign_init_ass_sheet'][] =  (int)$mr_without_sign_init_ass_sheet_per;
+
+       $json['mr_without_sign_init_medictn_order'][] =  (int)$mr_without_sign_init_medictn_order_per;
+
+       $json['mr_without_nursing_asst'][] = (int)$mr_without_nursing_asst_per;
+       $json['mr_without_nutrition_asst'][] =  (int)$mr_without_nutrition_asst_per;
+       $json['mr_without_physipy_asst'][] = (int)$mr_without_physipy_asst_per;
+
+       
+       
+        $json['post_anaesthesia_scroing_sign_anaesthist'][] =  (int)$post_anaesthesia_scroing_sign_anaesthist_per;
+
+       
+     }
+
+
+
+}
+$section->addPageBreak();
+echo $total;
+$auditHeading= 'Medical Records Audit';
+$phpWord->addFontStyle('r2Style', array('bold'=>true, 'italic'=>false, 'size'=>20,'underline'=>'single'));
+$phpWord->addParagraphStyle('p2Style', array('align'=>'center', 'spaceAfter'=>100));
+$section->addText($auditHeading, 'r2Style', 'p2Style'); 
+
+
+
+$section->addText('Title- To check the compliance of  mrd as per NABH Standard.');
+$section->addTextBreak(1);
+$section->addText('Type of Audit- Retrospective');
+$section->addTextBreak(1);
+$section->addText('Month-  '.$monthsAll[0]  .'   to  '. $monthsAll[count($monthsAll)-1] );
+$section->addTextBreak(1);
+$section->addText('Number of mrd audited- '.round($total * 100 / $totalAll).'% of total mrd (sample size)');
+
+$section->addTextBreak(2);
+
+$auditHeading= 'Methodology';
+
+$fontStyle['name'] = 'Times New Roman';
+$fontStyle['size'] = 20;
+$fontStyle['underline'] = true;
+$section->addText($auditHeading , $fontStyle); 
+
+$section->addText('The study was conducted  in Criticare Hospital & Reserch Institute. The study was carried over a period of '.count($monthsAll).' months from '.$monthsAll[0].' to '.$monthsAll[count($monthsAll)-1].'. A total of '.$total.' In-patient Medical Records Audit were randomly sampled from the hospital pharmacy.');
+
+$section->addText('The details of all the Medical Records Audit were analyzed on the following parameters:');
+
+$section->addTextBreak(1);
+$aAll =array('MR without Discharge Summary','MR having Incomplete/Improper consent','MR without Sign of consultanton Initial', 'MR without Sign of consultant on Medication Order','MR without Nursing Asssement','MR without Nutritional Asssement','MR without Physiotherapy Asssement','Post anaesthesia scoring done & Signed by anaesthtist');
+
+foreach ($aAll as $key => $av) {
+  $section->addListItem($av);
+
+}
+
+$section->addTextBreak(2);
+$header = array('size' => 16, 'bold' => true);
+$section->addText('Analysis', $header);
+
+$section->addListItem('The area of adherence and their compliance is shown below');
+
+
+$fancyTableStyleName = 'Fancy Table';
+$fancyTableStyle = array('borderSize' => 6, 'borderColor' => '006699', 'cellMargin' => 20, 'alignment' => \PhpOffice\PhpWord\SimpleType\JcTable::CENTER, 'cellSpacing' => 10);
+$fancyTableFirstRowStyle = array('borderBottomSize' => 5, 'borderBottomColor' => '0000FF', 'bgColor' => '66BBFF');
+$fancyTableCellStyle = array('valign' => 'center');
+$fancyTableCellBtlrStyle = array('valign' => 'center', 'textDirection' => \PhpOffice\PhpWord\Style\Cell::TEXT_DIR_BTLR);
+$fancyTableFontStyle = array('bold' => true);
+$phpWord->addTableStyle($fancyTableStyleName, $fancyTableStyle, $fancyTableFirstRowStyle);
+$table = $section->addTable($fancyTableStyleName);
+$table->addRow(900);
+
+$countid = 1;
+
+$table->addCell(1000, $fancyTableCellStyle)->addText('Sr. No.', $fancyTableFontStyle);
+$table->addCell(4000, $fancyTableCellStyle)->addText('Audit element in MRD', $fancyTableFontStyle);
+ 
+
+    foreach ($dataAll as $key => $da) {
+           
+       
+
+        $table->addCell(2000, $fancyTableCellStyle)->addText($da['month'].'('.$da['count'].')', $fancyTableFontStyle);    
+    }
+
+$dataA[0] = array(0=>'MR without Discharge  Summary' , 1 =>'mr_without_dis_summary');
+$dataA[1] = array(0=>'MR having Incomplete/ Improper  consent' , 1 =>'mr_having_incm_imp_const');
+$dataA[2] = array(0=>'MR without  Sign of consultant  on Initial  Assessment sheet' , 1 =>'mr_without_sign_init_ass_sheet');
+$dataA[3] = array(0=>'MR without  Sign of consultant on Medication Order' , 1 =>'mr_without_sign_init_medictn_order');
+$dataA[4] = array(0=>'MR without Nursing Asssement' , 1 =>'mr_without_nursing_asst');
+$dataA[5] = array(0=>'MR without Nutritional Asssement' , 1 =>'mr_without_nutrition_asst');
+$dataA[6] = array(0=>'MR without Physiotherapy Asssement' , 1 =>'mr_without_physipy_asst');
+$dataA[7] = array(0=>'Post anaesthesia scoring done & Signed by anaesthtist' , 1 =>'post_anaesthesia_scroing_sign_anaesthist');
+
+
+foreach ($dataA as $key => $val) {
+
+    $table->addRow();
+
+    $table->addCell(1000)->addText(++$key);
+    $table->addCell(4000)->addText($val[0]);
+
+  
+
+    foreach ($dataAll as $key => $da) {
+           
+        
+
+        $table->addCell(2000)->addText(number_format($da[$val[1]],2));   
+    }
+
+
+
+}
+$section->addTextBreak(2);
+//graph start
+$section = $phpWord->addSection(array('colsNum' => 1, 'breakType' => 'continuous','borderColor' => '00FF00', 'borderSize' => 10));
+
+
+$showGridLines = false;
+$showAxisLabels = true;
+
+
+// 3D charts
+
+
+$section->addTitle('', 1);
+
+$chartTypes = array('column');
+$multiSeries = array();
+$style = array(
+    'width'          => Converter::cmToEmu(10),
+    'height'         => Converter::cmToEmu(8),
+    '3d'             => false,
+    'showAxisLabels' => $showAxisLabels,
+    'showGridX'      => false,
+    'showGridY'      => true,
+
+);
+
+
+foreach ($dataA as $keyAll => $valueAll) {
+
+    $section->addTitle(ucfirst($valueAll[0]), 2);
+    $section->addTitle('% of yes');
+    $chart = $section->addChart('column', $monthsAll, $json[$valueAll[1]], $style);
+    
+    $section->addTextBreak();
+
+   
+}
+//graph end
+
+
+$section->addPageBreak();
+
+$auditHeading= '1)Corrective Action';
+
+$fontStyle['name'] = 'Times New Roman';
+$fontStyle['size'] = 20;
+$fontStyle['underline'] = true;
+$section->addText($auditHeading , $fontStyle); 
+
+$section->addTextBreak(1);
+
+foreach ($monthsAll as $key => $value) { 
+$output=[];
+    $query = "SELECT corrective_action  FROM `tbl_monthly_audit_reports`
+          
+            WHERE audit_date_month_year = '".$value."' 
+        AND audit_name='tbl_medical_record_audit'";
+$statement = $connection->prepare($query);
+  $statement->execute();
+  $result = $statement->fetchAll();
+  foreach($result as $row)
+  {
+     $output = json_decode($row["corrective_action"]);
+         
+  }
+foreach ($output as $key1 => $out) {
+  if($key1!=100){
+  
+ 
+  
+  $section->addListItem($out);
+}
+}
+}
+$section->addTextBreak(1);
+$auditHeading= '2)Preventive Action';
+
+$fontStyle['name'] = 'Times New Roman';
+$fontStyle['size'] = 20;
+$fontStyle['underline'] = true;
+$section->addText($auditHeading , $fontStyle); 
+
+$section->addTextBreak(1);
+
+foreach ($monthsAll as $key => $value) { 
+$output=[];
+    $query = "SELECT preventive_action  FROM `tbl_monthly_audit_reports`
+          
+            WHERE audit_date_month_year = '".$value."' 
+        AND audit_name='tbl_medical_record_audit'";
+$statement = $connection->prepare($query);
+  $statement->execute();
+  $result = $statement->fetchAll();
+  foreach($result as $row)
+  {
+     $output = json_decode($row["preventive_action"]);
+         
+  }
+foreach ($output as $key1 => $out) {
+  if($key1!=100){
+  
+ 
+  
+  $section->addListItem($out);
+}
+}
+}
+
+
+// Save file
+
+$wordocname = 'mrd'.time();
+$fol='mrd';
+
+echo write($phpWord, $wordocname, $writers,$fol);
+
+} else {
+    echo "<script>function goBack() {window.history.back();goBack();}</script>";
+}
+
+if (!CLI) {
+    include_once 'Sample_Footer.php';
+}

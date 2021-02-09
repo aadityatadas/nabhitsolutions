@@ -1,0 +1,45 @@
+<?php
+
+
+include('../dbinfo.php');
+
+ $data=array('Manual',
+                                                                    'Patients Right &responsibilities',
+                                                                    'Data for quality indicator',
+                                                                    'Training Record',
+                                                                    'Scope of services',
+                                                                    'Services not available ',
+                                                                    'HIC protocol – terminal cleaning/ fumigation record/chemicals used','Code blue mock drill','BMW segregation / guideline','Vulnerable Patients','Terminal cleaning record','Safe medication practices','Barrier Nursing','End of life care','High risk medication verification medication','Adverse drug events' ,'HIC procedures- hand washing, Sterilium, PPE','Spill management ','Transfer procedure','Hand hygiene practices ','Crash cart register','  Temperature control for fridge  3 times a day','Emergency Drugs register','High risk  Drug register'); 
+
+if ($connect->connect_error) {
+    die("Connection failed: " . $connect->connect_error);
+}
+
+
+foreach ($data as $key => $value) {
+	$a = $key+1;
+
+    $sql = "INSERT INTO tbl_faq_nurse (faqname, pos ) VALUES ('$value', $a)";
+    echo $sql;
+    echo "<br>";
+    $connect->query($sql);
+}
+
+
+
+// $sql = "INSERT INTO tbl_faq_rec (faqname, pos, )
+// VALUES ('John', 'Doe', 'john@example.com')";
+
+// if ($connect->query($sql) === TRUE) {
+//     echo "New record created successfully";
+// } else {
+//     echo "Error: " . $sql . "<br>" . $connect->error;
+// }
+
+$connect->close();
+
+
+
+
+
+?>

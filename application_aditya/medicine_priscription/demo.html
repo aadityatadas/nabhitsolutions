@@ -1,0 +1,244 @@
+<html>
+  <head>
+   <title>Bootstrap Live Search Plugin - One of the Best Plugin Select Box with Live Search Option</title>  
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.10.0/css/bootstrap-select.min.css" />
+  </head>
+  <style type="text/css" media="screen">
+     #billdesc{
+    padding-top: 50px;
+}
+#test{
+    width: 100%;
+    height: 30px;
+}
+option {
+    height: 30px;
+    line-height: 30px;
+}
+
+.editOption{
+    width: 90%;
+    height: 24px;
+    position: relative;
+    top: -30px
+
+}
+  </style>
+  <style>
+#medicinie {
+  font-family: "Trebuchet MS", Arial, Helvetica, sans-serif;
+  border-collapse: collapse;
+  width: 100%;
+}
+
+#medicinie td, #medicinie th {
+  border: 1px solid #ddd;
+  padding: 8px;
+}
+
+#medicinie tr:nth-child(even){background-color: #f2f2f2;}
+
+#medicinie tr:hover {background-color: #ddd;}
+
+#medicinie th {
+  padding-top: 12px;
+  padding-bottom: 12px;
+  text-align: left;
+  background-color: #95bee1;
+  color: white;
+}
+</style>
+<body>
+  <div class="container">
+  <h2>One of the Best Plugin for Select Box with Data Live Search Option</h2>
+    <div class="row">
+      <select class="selectpicker" data-show-subtext="true" data-live-search="true">
+       <option>Expert PHP</option>
+        <option>Demo PHP</option>
+        <option>PHP Tutorials</option>
+        <option>PHP Framework</option>
+        <option>PHP Libraries</option>
+        <option>HTML</option>
+        <option>CSS</option>
+        <option>JS</option>
+        <option>MySQL</option>
+      </select>
+    
+    </div>
+  <br>
+  <div class="row">
+  <div id="billdesc">
+    <select id="test">
+      <option class="non" value="option1">Option1</option>
+      <option class="non" value="option2">Option2</option>
+      <option class="editable" value="other">Other</option>
+    </select>
+    <input class="editOption" style="display:none;"></input>
+</div>
+</div>
+<table class="table table-bordered" id="medicinie">
+  <thead style="background-color: lightgray;">
+    <tr>
+      TO BE FILLED BY DOCTOR
+      <th scope="col" colspan="5" style="padding-left: 100px">TO BE FILLED BY DOCTOR</th>
+      <th scope="col" colspan="5" style="padding-left: 130px">BY NURSES</th>
+    </tr>
+    <tr>
+      <th scope="col">Sr. No.</th>
+      <th scope="col">Name of the Drug</th>
+
+      <th scope="col">Dose</th>
+      <th scope="col">Route</th>
+      <th scope="col">Sign. <br>(DMO)</th>
+     
+      <th scope="col">Time & Sign.</th>
+      <th scope="col">Time & Sign.</th>
+      <th scope="col">Time & Sign.</th>
+      <th scope="col">Time & Sign.</th>
+     <th scope="col">Verified By</th>
+
+
+    </tr>
+  </thead>
+   <tbody>
+    <tr>
+      <th scope="row">1</th>
+      <td>Mark</td>
+      <td><select class="selectpicker" data-show-subtext="true" data-live-search="true">
+       <option>Expert PHP</option>
+        <option>Demo PHP</option>
+        <option>PHP Tutorials</option>
+        <option>PHP Framework</option>
+        <option>PHP Libraries</option>
+        <option>HTML</option>
+        <option>CSS</option>
+        <option>JS</option>
+        <option>MySQL</option>
+      </select></td>
+      <td><select id="test">
+      <option class="non" value="option1">Option1</option>
+      <option class="non" value="option2">Option2</option>
+      <option class="editable" value="other">Other</option>
+    </select>
+    <input class="editOption" style="display:none;"></input></td>
+      <td>Mark</td>
+      <td>Otto</td>
+      <td>@mdo</td>
+      <td>Mark</td>
+      <td>Otto</td>
+      <td>@mdo</td>
+    </tr>
+    
+  </tbody> 
+</table>
+</div>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/js/bootstrap.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.10.0/js/bootstrap-select.min.js"></script>
+</body>
+
+<script type="text/javascript">
+  var initialText = $('.editable').val();
+$('.editOption').val(initialText);
+
+$('#test').change(function(){
+var selected = $('option:selected', this).attr('class');
+var optionText = $('.editable').text();
+
+if(selected == "editable"){
+  $('.editOption').show();
+  
+$("#test").css("display", "none");
+
+  $('.editOption').keyup(function(){
+      var editText = $('.editOption').val();
+      $('.editable').val(editText);
+      $('.editable').html(editText);
+  });
+
+}else{
+  $('.editOption').hide();
+}
+});
+</script>
+</html>
+
+
+
+
+<br>
+
+
+<br>
+
+<!DOCTYPE html>
+<html>
+   <head>
+      <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+      <script>
+         $(document).ready(function(){
+             $(".add").on("click", function () {
+                var v = $('.rank1').val();
+                alert(v);
+             });
+         });
+      </script>
+   </head>
+   <body>
+<div class="content">
+      <div class="ranking">
+           <label>Rank:</label>
+           <input type="text" name="rank" class="rank1" value="1"/>
+      </div>
+      <div class="buttons">
+           <a href="#" class="add">Click</a>
+      </div>
+ </div>  
+<br>
+<span class="row1">
+    <div class="column"><input class="inputQty" id="quantity0" /></div>
+    <div class="column"><input class="someOther" id="Other0"  onkeyup="check_select(this.id)" /></div>
+    <div class="column">
+        <div class="cSelect">
+            <select id="currency0" class="select_med" onchange="check(this.id)"> <option value="">--select--</option>
+              <option value="£">£</option>
+            <option value="£1">£1</option>
+          <option value="£2"> £2</option>
+        </select>
+            <input class="price" id="price0" />
+        </div>
+    </div>
+    <br>
+    <div class="column">
+    <div class="cSelect">
+            <select id="currency0">
+              <option value="">--select--</option>
+              <option value="£">£</option>
+            <option value="£1">£1</option>
+          <option value="£2"> £2</option></select>
+            <input class="price" id="price0" />
+        </div>
+      </div>
+</span>
+  </body>
+
+  <script type="text/javascript">
+//     $('#currency0').on('change', function() {
+//   var a=$(this).closest('.row1').find('.inputQty').val();
+//   alert(a);
+// });
+
+    function check(id){
+      var a=$("#"+id).closest('.row1').find('.inputQty').val();
+  alert(a);
+    }
+
+    
+     function check_select(id){
+    $("#"+id).closest('.row1').find('.select_med').val("");
+  
+    }
+    
+  </script>
+</html>

@@ -1,0 +1,35 @@
+<?php
+function upload_rpt1()
+{
+	if(isset($_FILES["rpt_rpt1"]))
+	{
+		$extension = explode('.', $_FILES['rpt_rpt1']['name']);
+		$new_name = rand() . '.' . $extension[1];
+		$destination = './upload_needp/' . $new_name;
+		move_uploaded_file($_FILES['rpt_rpt1']['tmp_name'], $destination);
+		return $new_name;
+	}
+}
+function upload_rpt2()
+{
+	if(isset($_FILES["rpt_rpt2"]))
+	{
+		$extension = explode('.', $_FILES['rpt_rpt2']['name']);
+		$new_name = rand() . '.' . $extension[1];
+		$destination = './upload_needp/' . $new_name;
+		move_uploaded_file($_FILES['rpt_rpt2']['tmp_name'], $destination);
+		return $new_name;
+	}
+}
+function upload_rpt3()
+{
+	if(isset($_FILES["rpt_rpt3"]))
+	{
+		$extension = explode('.', $_FILES['rpt_rpt3']['name']);
+		$new_name = rand() . '.' . $extension[1];
+		$destination = './upload_needp/' . $new_name;
+		move_uploaded_file($_FILES['rpt_rpt3']['tmp_name'], $destination);
+		return $new_name;
+	}
+}
+?>
