@@ -445,6 +445,7 @@ function goBack() {
 					{
 						 console.log(data);
 						alert(data);
+					
 						dataTable.ajax.reload();
 					}
 				});
