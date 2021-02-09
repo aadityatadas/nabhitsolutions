@@ -89,7 +89,7 @@
 									<small>Welcome</small>
 									<!-- <h3><?php
                     
-                     				 $sql = "SELECT * From tbl_staff  WHERE stf_id=".$_SESSION['id'];
+                     				 $sql = "SELECT *  From tbl_staff  WHERE stf_id=".$_SESSION['id'];
                                      $result = mysqli_query($connect, $sql);
                                      $DB_ROW = mysqli_fetch_assoc($result);
                                     

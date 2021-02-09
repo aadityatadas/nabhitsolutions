@@ -443,6 +443,7 @@ function goBack() {
 					data:{user_id:user_id},
 					success:function(data)
 					{
+						 console.log(data);
 						alert(data);
 						dataTable.ajax.reload();
 					}
